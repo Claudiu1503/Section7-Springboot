@@ -23,7 +23,7 @@ public class CustomerController {
 
         customerService.patchCustomerById(customerId,customer);
 
-        return new ResponseEntity(HttpStatus.NO_CONTENT)
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("{customerId}")
