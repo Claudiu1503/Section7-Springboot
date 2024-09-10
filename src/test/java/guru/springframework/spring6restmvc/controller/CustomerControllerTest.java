@@ -115,6 +115,13 @@ class CustomerControllerTest {
                 .andExpect(jsonPath("$.length()", is(3)));
     }
 
+    @Test
+    void getCustomerByIdNotFound() throws Exception {
+        given(customerService.getCustomerById(any(UUID.class))).willThrow(NotFoundException.class);
+
+        mockMvc.perform(get(CustomerController.CUSTOMER_PATH_ID,UUID.randomUUID()))
+                .andExpect(status().isNotFound());
+    }
 
     // nu merge testu asta
     //REZOLVARE, in loc de "customerName", am definit simplu in model doar campul "name",
