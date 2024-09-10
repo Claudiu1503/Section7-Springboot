@@ -66,7 +66,7 @@ class CustomerControllerTest {
     @Test
     void testDeleteCustomer() throws Exception {
         Customer customer = new CustomerServiceImpl().getAllCustomers().get(0);
-        mockMvc.perform(delete("/api/v1/customer/" + customer.getId())
+        mockMvc.perform(delete(CustomerController.CUSTOMER_PATH + "/" + customer.getId())
                 .contentType(MediaType.APPLICATION_JSON));
         verify(customerService).deleteById(any());
     }
@@ -77,7 +77,7 @@ class CustomerControllerTest {
         Customer customer = new CustomerServiceImpl().getAllCustomers().get(0);
 
         //Neaparat "/" la final ca is prost si nu vad :))
-        mockMvc.perform(put("/api/v1/customer/" + customer.getId())
+        mockMvc.perform(put(CustomerController.CUSTOMER_PATH + "/"+ customer.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customer)));
@@ -94,7 +94,7 @@ class CustomerControllerTest {
         customer.setId(null);
 
         given(customerService.saveNewCustomer(any(Customer.class))).willReturn(customerServiceImpl.getAllCustomers().get(1));
-        mockMvc.perform(post("/api/v1/customer")
+        mockMvc.perform(post(CustomerController.CUSTOMER_PATH)
                     .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customer)))
@@ -108,7 +108,7 @@ class CustomerControllerTest {
 
         given(customerService.getAllCustomers()).willReturn(customerServiceImpl.getAllCustomers());
 
-        mockMvc.perform(get("/api/v1/customer")
+        mockMvc.perform(get(CustomerController.CUSTOMER_PATH)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -126,7 +126,7 @@ class CustomerControllerTest {
 
         given(customerService.getCustomerById(testCustomer.getId())).willReturn(testCustomer);
 
-        mockMvc.perform(get("/api/v1/customer/"+testCustomer.getId())
+        mockMvc.perform(get(CustomerController.CUSTOMER_PATH + "/" +testCustomer.getId())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))

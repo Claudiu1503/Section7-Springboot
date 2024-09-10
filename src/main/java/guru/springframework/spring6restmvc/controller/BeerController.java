@@ -17,12 +17,15 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/beer")
+//@RequestMapping("/api/v1/beer")
 public class BeerController {
     private final BeerService beerService;
 
+    public static final String BEER_PATH = "/api/v1/beer";
+    public static final String BEER_PATH_ID = BEER_PATH + "/{beerId}";
 
-    @PatchMapping("{beerId}")
+
+    @PatchMapping(BEER_PATH_ID)
     public ResponseEntity updateBeerPatchById(@PathVariable("beerId") UUID beerId, @RequestBody Beer beer){
 
         beerService.patchBeerById(beerId,beer);
@@ -31,7 +34,7 @@ public class BeerController {
     }
 
 
-    @DeleteMapping("{beerId}")
+    @DeleteMapping(BEER_PATH_ID)
     public ResponseEntity deleteById(@PathVariable("beerId") UUID beerId){
 
         beerService.deleteById(beerId);
@@ -39,7 +42,7 @@ public class BeerController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping ("{beerId}")
+    @PutMapping (BEER_PATH_ID)
     public ResponseEntity updateById(@PathVariable("beerId") UUID beerId, @RequestBody Beer beer){
 
         beerService.updateBeerById(beerId,beer);
@@ -49,7 +52,7 @@ public class BeerController {
 
 
 
-    @PostMapping
+    @PostMapping(BEER_PATH)
     //@RequestMapping(method = RequestMethod.POST)
     public ResponseEntity handlePost(@RequestBody Beer beer){
 
@@ -63,12 +66,12 @@ public class BeerController {
 
 
 //    @RequestMapping("/api/v1/beer") //nu mai treben sa pun asta ca e deja global
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping(BEER_PATH)
     public List<Beer> listBeers(){
         return beerService.listBeers();
 
     }
-    @RequestMapping(value = "{beerId}", method = RequestMethod.GET)
+    @GetMapping(BEER_PATH_ID)
     public Beer geetBeerById(@PathVariable("beerId") UUID beerId){
 
         log.debug("Gett beer by id - in controller - test devtools");
