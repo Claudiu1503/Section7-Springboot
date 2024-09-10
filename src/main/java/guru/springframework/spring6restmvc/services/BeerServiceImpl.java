@@ -76,7 +76,7 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public Beer saveNewBeer( Beer beer) {
+    public Beer saveNewBeer(Beer beer) {
         Beer savedBeer = Beer.builder()
                 .id(UUID.randomUUID())
                 .createdDate(LocalDateTime.now())
