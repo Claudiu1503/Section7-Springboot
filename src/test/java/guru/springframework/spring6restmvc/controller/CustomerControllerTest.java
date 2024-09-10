@@ -63,6 +63,13 @@ class CustomerControllerTest {
         customerServiceImpl = new CustomerServiceImpl();
     }
 
+    @Test
+    void testDeleteCustomer() throws Exception {
+        Customer customer = new CustomerServiceImpl().getAllCustomers().get(0);
+        mockMvc.perform(delete("/api/v1/customer/" + customer.getId())
+                .contentType(MediaType.APPLICATION_JSON));
+        verify(customerService).deleteById(any());
+    }
 
     @Test
     void testUpdateCustomer() throws Exception {
