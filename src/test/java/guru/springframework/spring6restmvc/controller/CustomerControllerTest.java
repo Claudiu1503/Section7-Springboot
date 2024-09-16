@@ -55,7 +55,7 @@ class CustomerControllerTest {
         CustomerDTO customer = new CustomerServiceImpl().getAllCustomers().get(0);
         mockMvc.perform(delete(CustomerController.CUSTOMER_PATH + "/" + customer.getId())
                 .contentType(MediaType.APPLICATION_JSON));
-        verify(customerService).deleteById(any());
+        verify(customerService).deleteCustomerById(any());
     }
 
     @Test
