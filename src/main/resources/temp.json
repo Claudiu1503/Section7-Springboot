@@ -1,0 +1,25 @@
+{
+  "arguments": [
+    {
+      "codes": [
+        "beerDTO.beerName",
+        "beerName"
+      ],
+      "arguments": null,
+      "defaultMessage": "beerName",
+      "code": "beerName"
+    }
+  ],
+  "bindingFailure": false,
+  "code": "NotNull",
+  "codes": [
+    "NotNull.beerDTO.beerName",
+    "NotNull.beerName",
+    "NotNull.java.lang.String",
+    "NotNull"
+  ],
+  "defaultMessage": "must not be null",
+  "field": "beerName",
+  "objectName": "beerDTO",
+  "rejectedValue": null
+}
