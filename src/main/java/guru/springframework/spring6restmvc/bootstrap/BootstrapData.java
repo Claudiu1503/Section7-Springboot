@@ -28,7 +28,7 @@ public class BootstrapData implements CommandLineRunner {
 
         Beer beer1 = new Beer();
         beer1.setBeerName("Ursus Premium");
-        beer1.setBeerStyle(BeerStyle.LAGER);
+        beer1.setBeerStyle(BeerStyle.IPA);
         beer1.setUpc("123456789012");
         beer1.setQuantityOnHand(100);
         beer1.setPrice(new BigDecimal("7.99"));
@@ -37,7 +37,7 @@ public class BootstrapData implements CommandLineRunner {
 
         Beer beer2 = new Beer();
         beer2.setBeerName("Ciucas");
-        beer2.setBeerStyle(BeerStyle.PILSNER);
+        beer2.setBeerStyle(BeerStyle.PALE_ALE);
         beer2.setUpc("987654321098");
         beer2.setQuantityOnHand(200);
         beer2.setPrice(new BigDecimal("5.99"));
@@ -46,7 +46,7 @@ public class BootstrapData implements CommandLineRunner {
 
         Beer beer3 = new Beer();
         beer3.setBeerName("Silva Dark");
-        beer3.setBeerStyle(BeerStyle.STOUT);
+        beer3.setBeerStyle(BeerStyle.PILSNER);
         beer3.setUpc("192837465012");
         beer3.setQuantityOnHand(50);
         beer3.setPrice(new BigDecimal("8.99"));
