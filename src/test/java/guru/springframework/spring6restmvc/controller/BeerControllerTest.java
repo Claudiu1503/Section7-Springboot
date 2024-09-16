@@ -64,7 +64,7 @@ class BeerControllerTest {
     void testDeleteBeer() throws Exception{
         BeerDTO beer = new BeerServiceImpl().listBeers().get(0);
 
-        given(beerService.updateBeerById(any(),any())).willReturn(Optional.of(beer));
+        given(beerService.deleteById(any())).willReturn(true);
 
         mockMvc.perform(delete(BEER_PATH + "/"+ beer.getId())
                         .accept(MediaType.APPLICATION_JSON))
@@ -78,7 +78,7 @@ class BeerControllerTest {
     void testUpdateBeer() throws Exception {
         BeerDTO beer = new BeerServiceImpl().listBeers().get(0);
 
-
+        given(beerService.updateBeerById(any(),any())).willReturn(Optional.of(beer));
         mockMvc.perform(put(BEER_PATH_ID , beer.getId())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
