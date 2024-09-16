@@ -19,6 +19,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.willThrow;
@@ -124,7 +125,7 @@ class BeerControllerTest {
     @Test
     void geetBeerByIdNotFound() throws Exception {
 
-        given(beerService.getBeerById(any(UUID.class))).willThrow(NotFoundException.class);
+        given(beerService.getBeerById(any(UUID.class))).willReturn(Optional.empty());
 
         mockMvc.perform(get(BEER_PATH_ID,UUID.randomUUID()))
                 .andExpect(status().isNotFound());
@@ -138,7 +139,7 @@ class BeerControllerTest {
 
 
         // aici configuram mokito
-       given(beerService.getBeerById(testBeer.getId())).willReturn(testBeer);
+       given(beerService.getBeerById(testBeer.getId())).willReturn(Optional.of( testBeer));
 
         mockMvc.perform(get(BEER_PATH + "/" + testBeer.getId())
                         .accept(MediaType.APPLICATION_JSON))
