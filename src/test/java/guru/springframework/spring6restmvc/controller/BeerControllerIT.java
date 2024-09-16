@@ -37,7 +37,7 @@ class BeerControllerIT {
     @Test
     void deleteByIdFound() {
     Beer beer = beerRepository.findAll().get(0);
-    ResponseEntity responseEntity beerController.deleteById(beer.getId());
+    ResponseEntity responseEntity =  beerController.deleteById(beer.getId());
 
     Beer foundBeer = beerRepository.findById(beer.getId()).get();
 
