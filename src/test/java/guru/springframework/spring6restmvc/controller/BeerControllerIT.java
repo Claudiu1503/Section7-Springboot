@@ -125,6 +125,9 @@ class BeerControllerIT {
         assertThat(updateBeer.getBeerName()).isEqualTo(beerName);
     }
 
+
+    @Rollback
+    @Transactional
     @Test
     void saveNewBeerTest() {
 
