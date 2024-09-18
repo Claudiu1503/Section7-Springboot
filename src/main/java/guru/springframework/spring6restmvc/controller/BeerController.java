@@ -70,8 +70,8 @@ public class BeerController {
 
 //    @RequestMapping("/api/v1/beer") //nu mai treben sa pun asta ca e deja global
     @GetMapping(BEER_PATH)
-    public List<BeerDTO> listBeers(){
-        return beerService.listBeers();
+    public List<BeerDTO> listBeers(@RequestParam(required = false) String beerName){
+        return beerService.listBeers(beerName);
 
     }
 
