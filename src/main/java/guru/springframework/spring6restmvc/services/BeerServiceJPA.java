@@ -48,8 +48,9 @@ public class BeerServiceJPA implements BeerService {
     }
 
     //Local method
-    List<Beer> listBeersByName(String beerName) {
-        return new ArrayList<>();
+    public List<Beer> listBeersByName(String beerName) {
+
+        return beerRepository.findAllByBeerNameIsLikeIgnoreCase("%" + beerName + "%");
     }
 
 
