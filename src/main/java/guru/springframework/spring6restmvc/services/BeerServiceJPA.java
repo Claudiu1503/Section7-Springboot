@@ -31,7 +31,7 @@ public class BeerServiceJPA implements BeerService {
 
         if(StringUtils.hasText(beerName))
         {
-            //impl
+            //implementation
             beerList = listBeersByName(beerName);
 
         }
