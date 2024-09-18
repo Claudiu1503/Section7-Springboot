@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.SocketHandler;
 import java.util.stream.Collectors;
 
 @Service
@@ -85,7 +87,11 @@ public class BeerServiceJPA implements BeerService {
             }
         }
 
-        return PageRequest.of(queryPageNumber,queryPageSize);
+
+        Sort sort = Sort.by(Sort.Order.asc("beerName"));
+
+
+        return PageRequest.of(queryPageNumber,queryPageSize,sort);
     }
 
     private Page<Beer> listBeersByNameAndStyle(String beerName, BeerStyle beerStyle,PageRequest pageRequest) {
