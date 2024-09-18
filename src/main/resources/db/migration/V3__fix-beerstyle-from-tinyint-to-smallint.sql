@@ -1,0 +1,1 @@
+ALTER TABLE beer MODIFY COLUMN beer_style SMALLINT;

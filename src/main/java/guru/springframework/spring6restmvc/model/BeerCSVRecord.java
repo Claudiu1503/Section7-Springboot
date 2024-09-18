@@ -2,6 +2,7 @@ package guru.springframework.spring6restmvc.model;
 
 
 import com.opencsv.bean.CsvBindByName;
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

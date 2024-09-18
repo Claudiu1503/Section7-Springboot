@@ -2,83 +2,145 @@ package guru.springframework.spring6restmvc.bootstrap;
 
 import guru.springframework.spring6restmvc.entities.Beer;
 import guru.springframework.spring6restmvc.entities.Customer;
+import guru.springframework.spring6restmvc.model.BeerCSVRecord;
 import guru.springframework.spring6restmvc.model.BeerStyle;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
 import guru.springframework.spring6restmvc.repositories.CustomerRepository;
+import guru.springframework.spring6restmvc.services.BeerCSVService;
 import jakarta.persistence.Column;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ResourceUtils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 
 public class BootstrapData implements CommandLineRunner {
 
     private final BeerRepository beerRepository;
     private final CustomerRepository customerRepository;
+    private final BeerCSVService beerCSVService;
 
-
+    @Transactional
     @Override
     public void run(String... args) throws Exception {
+        loadBeerData();
+        loadCsvData();
+        loadCustomerData();
+    }
 
+    private void loadCsvData() throws FileNotFoundException {
+        if (beerRepository.count() < 100){
+            File file = ResourceUtils.getFile("classpath:csvdata/beers.csv");
 
-        Beer beer1 = new Beer();
-        beer1.setBeerName("Ursus Premium");
-        beer1.setBeerStyle(BeerStyle.IPA);
-        beer1.setUpc("123456789012");
-        beer1.setQuantityOnHand(100);
-        beer1.setPrice(new BigDecimal("7.99"));
-        beer1.setCreatedDate(LocalDateTime.now());
-        beer1.setUpdateDate(LocalDateTime.now());
+            List<BeerCSVRecord> recs = beerCSVService.convertCSV(file);
 
-        Beer beer2 = new Beer();
-        beer2.setBeerName("Ciucas");
-        beer2.setBeerStyle(BeerStyle.PALE_ALE);
-        beer2.setUpc("987654321098");
-        beer2.setQuantityOnHand(200);
-        beer2.setPrice(new BigDecimal("5.99"));
-        beer2.setCreatedDate(LocalDateTime.now());
-        beer2.setUpdateDate(LocalDateTime.now());
+            recs.forEach(beerCSVRecord -> {
+                BeerStyle beerStyle = switch (beerCSVRecord.getStyle()) {
+                    case "American Pale Lager" -> BeerStyle.LAGER;
+                    case "American Pale Ale (APA)", "American Black Ale", "Belgian Dark Ale", "American Blonde Ale" ->
+                            BeerStyle.ALE;
+                    case "American IPA", "American Double / Imperial IPA", "Belgian IPA" -> BeerStyle.IPA;
+                    case "American Porter" -> BeerStyle.PORTER;
+                    case "Oatmeal Stout", "American Stout" -> BeerStyle.STOUT;
+                    case "Saison / Farmhouse Ale" -> BeerStyle.SAISON;
+                    case "Fruit / Vegetable Beer", "Winter Warmer", "Berliner Weissbier" -> BeerStyle.WHEAT;
+                    case "English Pale Ale" -> BeerStyle.PALE_ALE;
+                    default -> BeerStyle.PILSNER;
+                };
 
-        Beer beer3 = new Beer();
-        beer3.setBeerName("Silva Dark");
-        beer3.setBeerStyle(BeerStyle.PILSNER);
-        beer3.setUpc("192837465012");
-        beer3.setQuantityOnHand(50);
-        beer3.setPrice(new BigDecimal("8.99"));
-        beer3.setCreatedDate(LocalDateTime.now());
-        beer3.setUpdateDate(LocalDateTime.now());
+                beerRepository.save(Beer.builder()
+                        .beerName(StringUtils.abbreviate(beerCSVRecord.getBeer(), 50))
+                        .beerStyle(beerStyle)
+                        .price(BigDecimal.TEN)
+                        .upc(beerCSVRecord.getRow().toString())
+                        .quantityOnHand(beerCSVRecord.getCount())
+                        .build());
+            });
+        }
 
-        beerRepository.save(beer1);
-        beerRepository.save(beer2);
-        beerRepository.save(beer3);
+    }
 
-        // Populare cu date pentru entitatea Customer
-        Customer customer1 = new Customer();
-        customer1.setName("Ion Popescu");
-        customer1.setCreatedDate(LocalDateTime.now());
-        customer1.setUpdateDate(LocalDateTime.now());
+    private void loadBeerData() {
+        if (beerRepository.count() == 0){
+            Beer beer1 = Beer.builder()
+                    .beerName("Galaxy Cat")
+                    .beerStyle(BeerStyle.PALE_ALE)
+                    .upc("12356")
+                    .price(new BigDecimal("12.99"))
+                    .quantityOnHand(122)
+                    .createdDate(LocalDateTime.now())
+                    .updateDate(LocalDateTime.now())
+                    .build();
 
-        Customer customer2 = new Customer();
-        customer2.setName("Maria Ionescu");
-        customer2.setCreatedDate(LocalDateTime.now());
-        customer2.setUpdateDate(LocalDateTime.now());
+            Beer beer2 = Beer.builder()
+                    .beerName("Crank")
+                    .beerStyle(BeerStyle.PALE_ALE)
+                    .upc("12356222")
+                    .price(new BigDecimal("11.99"))
+                    .quantityOnHand(392)
+                    .createdDate(LocalDateTime.now())
+                    .updateDate(LocalDateTime.now())
+                    .build();
 
-        Customer customer3 = new Customer();
-        customer3.setName("George Enescu");
-        customer3.setCreatedDate(LocalDateTime.now());
-        customer3.setUpdateDate(LocalDateTime.now());
+            Beer beer3 = Beer.builder()
+                    .beerName("Sunshine City")
+                    .beerStyle(BeerStyle.IPA)
+                    .upc("12356")
+                    .price(new BigDecimal("13.99"))
+                    .quantityOnHand(144)
+                    .createdDate(LocalDateTime.now())
+                    .updateDate(LocalDateTime.now())
+                    .build();
 
-        customerRepository.save(customer1);
-        customerRepository.save(customer2);
-        customerRepository.save(customer3);
+            beerRepository.save(beer1);
+            beerRepository.save(beer2);
+            beerRepository.save(beer3);
+        }
 
-        System.out.println("In Bootstrap");
-        System.out.println("Beer Count: " + beerRepository.count());
-        System.out.println("Customer Count: " + customerRepository.count());
+    }
+
+    private void loadCustomerData() {
+
+        if (customerRepository.count() == 0) {
+            Customer customer1 = Customer.builder()
+                    .id(UUID.randomUUID())
+                    .name("Customer 1")
+                    .version(1)
+                    .createdDate(LocalDateTime.now())
+                    .updateDate(LocalDateTime.now())
+                    .build();
+
+            Customer customer2 = Customer.builder()
+                    .id(UUID.randomUUID())
+                    .name("Customer 2")
+                    .version(1)
+                    .createdDate(LocalDateTime.now())
+                    .updateDate(LocalDateTime.now())
+                    .build();
+
+            Customer customer3 = Customer.builder()
+                    .id(UUID.randomUUID())
+                    .name("Customer 3")
+                    .version(1)
+                    .createdDate(LocalDateTime.now())
+                    .updateDate(LocalDateTime.now())
+                    .build();
+
+            customerRepository.saveAll(Arrays.asList(customer1, customer2, customer3));
+        }
+
     }
 }
