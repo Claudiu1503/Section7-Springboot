@@ -69,7 +69,7 @@ class BeerControllerTest {
 
     @Test
     void testPatchBeer() throws Exception {
-        BeerDTO beer = beerServiceImpl.listBeers(null, null, false).get(0);
+        BeerDTO beer = beerServiceImpl.listBeers(null, null, false, 1, 25).get(0);
 
         Map<String, Object> beerMap = new HashMap<>();
         beerMap.put("beerName", "New Name");
@@ -88,7 +88,7 @@ class BeerControllerTest {
 
     @Test
     void testDeleteBeer() throws Exception{
-        BeerDTO beer = beerServiceImpl.listBeers(null, null, false).get(0);
+        BeerDTO beer = beerServiceImpl.listBeers(null, null, false, 1, 25).get(0);
 
         given(beerService.deleteById(any())).willReturn(true);
 
@@ -104,7 +104,7 @@ class BeerControllerTest {
 
     @Test
     void testUpdateBeer() throws Exception {
-        BeerDTO beer = new BeerServiceImpl().listBeers(null, null, false).get(0);
+        BeerDTO beer = new BeerServiceImpl().listBeers(null, null, false, 1, 25).get(0);
 
         given(beerService.updateBeerById(any(),any())).willReturn(Optional.of(beer));
         mockMvc.perform(put(BEER_PATH_ID , beer.getId())
@@ -119,11 +119,11 @@ class BeerControllerTest {
     @Test
     void testCreateNewBeer() throws Exception {
 
-        BeerDTO beer = new BeerServiceImpl().listBeers(null, null, false).get(0);
+        BeerDTO beer = new BeerServiceImpl().listBeers(null, null, false, 1, 25).get(0);
         beer.setVersion(null);
         beer.setId(null);
 
-        given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers(null, null, false).get(1));
+        given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers(null, null, false, 1, 25).get(1));
 
         mockMvc.perform(post(BEER_PATH)
                 .accept(MediaType.APPLICATION_JSON)
@@ -141,7 +141,7 @@ class BeerControllerTest {
     @Test
     void testCreateBeerNullBeerName() throws Exception {
         BeerDTO beerDTO = BeerDTO.builder().build();
-        given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers(null, null, false).get(1));
+        given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers(null, null, false, 1, 25).get(1));
 
         MvcResult mvcResult= mockMvc.perform(post(BEER_PATH)
                 .accept(MediaType.APPLICATION_JSON)
@@ -153,7 +153,7 @@ class BeerControllerTest {
     }
     @Test
     void testUpdateBeerBlankName() throws Exception {
-        BeerDTO beer = beerServiceImpl.listBeers(null, null, false).get(0);
+        BeerDTO beer = beerServiceImpl.listBeers(null, null, false, 1, 25).get(0);
         beer.setBeerName("      "); // spaces and tabs
         given(beerService.updateBeerById(any(), any())).willReturn(Optional.of(beer));
 
@@ -166,7 +166,7 @@ class BeerControllerTest {
     }
     @Test
     void testUpdateBeerNullName() throws Exception {
-        BeerDTO beer = beerServiceImpl.listBeers(null, null, false).get(0);
+        BeerDTO beer = beerServiceImpl.listBeers(null, null, false, 1, 25).get(0);
         beer.setBeerName(null);
         given(beerService.updateBeerById(any(), any())).willReturn(Optional.of(beer));
 
@@ -181,7 +181,8 @@ class BeerControllerTest {
     @Test
     void testListBeers() throws Exception {
 
-        given(beerService.listBeers(any(), any(), any())).willReturn(beerServiceImpl.listBeers(any(), any(), any()));
+        given(beerService.listBeers(any(), any(), any(), any(), any()))
+                .willReturn(beerServiceImpl.listBeers(null, null, false, 1, 25));
 
 
         mockMvc.perform(get(BEER_PATH)
@@ -205,7 +206,7 @@ class BeerControllerTest {
     @Test
     void geetBeerById() throws Exception {
 
-        BeerDTO testBeer = beerServiceImpl.listBeers(null, null, false).get(0);
+        BeerDTO testBeer = beerServiceImpl.listBeers(null, null, false, 1, 25).get(0);
 
 
         // aici configuram mokito
