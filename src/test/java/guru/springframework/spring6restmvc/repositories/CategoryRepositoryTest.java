@@ -37,7 +37,7 @@ class CategoryRepositoryTest {
 
                 .build());
         testBeer.addCategory(savedCat);
-        Beer savedBeer = beerRepository.save(testBeer)
+        Beer savedBeer = beerRepository.save(testBeer);
 
         System.out.println(savedBeer.getBeerName());
 
