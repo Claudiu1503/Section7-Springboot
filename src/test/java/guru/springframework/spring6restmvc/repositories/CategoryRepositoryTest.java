@@ -2,6 +2,7 @@ package guru.springframework.spring6restmvc.repositories;
 
 import guru.springframework.spring6restmvc.entities.Beer;
 import guru.springframework.spring6restmvc.entities.Category;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,11 +30,13 @@ class CategoryRepositoryTest {
     }
 
 
+    @Transactional
     @Test
     void testAddCategory() {
 
         Category savedCat = categoryRepository.save(Category.builder()
                         .description("FixPula :))")
+
 
                 .build());
         testBeer.addCategory(savedCat);
